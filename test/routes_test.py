@@ -18,3 +18,13 @@ class TestRoutes:
     def test_age_should_be_zero_when_not_passed(self):
         person = Person('Pepe')
         assert_equal(0, person.age)
+
+    def test_should_have_the_email_of_the_person(self):
+        expected_email = 'dianagv@gmail.com'
+        person = Person('Pepe', email=expected_email)
+        actual_email = person.email
+        assert_equal(expected_email, actual_email)
+
+    def test_email_should_not_be_mandatory(self):
+        person = Person('Pepe')
+        assert_equal("", person.email)
