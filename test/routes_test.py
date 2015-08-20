@@ -1,10 +1,11 @@
 from nose.tools import *
 from app.person import Person
+from helpers.helpers import *
 
 class TestRoutes:
 
     def test_should_have_name_of_the_person(self):
-        expected_name = 'Diana Garcia'
+        expected_name = random_word(10)
         person = Person(expected_name)
         actual_name = person.name
         assert_equal(expected_name, actual_name)
@@ -15,7 +16,7 @@ class TestRoutes:
         actual_age = person.age
         assert_equal(expected_age, actual_age)
 
-    def test_age_should_be_zero_when_not_passed(self):
+    def test_age_should_be_zero_when_age_is_not_given(self):
         person = Person('Pepe')
         assert_equal(0, person.age)
 
