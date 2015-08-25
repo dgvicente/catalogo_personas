@@ -2,7 +2,7 @@ from nose.tools import *
 from pymongo import MongoClient
 from app.controller.person_controller import PersonController
 from app.model.person import Person
-import json
+from helpers.helpers import *
 
 
 class TestPersonController:
@@ -14,7 +14,7 @@ class TestPersonController:
         self.person = Person("Diana", 32, "dianagv@gmail.com")
 
     def tearDown(self):
-        self.database['persons'].remove(self.person.__dict__)
+        self.database['persons'].remove()
 
     def test_mongo_client_should_be_sucessfully_created(self):
         assert self.client != None
@@ -43,4 +43,27 @@ class TestPersonController:
         self.person_controller.insert(self.person)
         person_list = self.person_controller.list_all()
         assert len(person_list) > 0
-        assert_equal(person_list[0].name, self.person.name)
+        # assert self.person in person_list
+
+    def test_should_have_a_method_get_by_name(self):
+        person = self._get_random_person()
+        inserted_id = self.person_controller.insert(person)
+
+        db_person = self.person_controller.get_by_name(person.name)
+
+        assert_equal(db_person.name, person.name)
+        assert_equal(db_person.age, person.age)
+        assert_equal(db_person.email, person.email)
+
+    def test_should_return_none_when_invoked_get_by_name_with_false_name(self):
+        name = random_word(10)
+        db_person = self.person_controller.get_by_name(name)
+        assert_equal(db_person, None)
+
+
+    def _get_random_person(self):
+        name = random_word(10)
+        age = random_number(65)
+        email = random_email()
+
+        return Person(name=name, age=age, email=email)
