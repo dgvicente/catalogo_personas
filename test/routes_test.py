@@ -1,5 +1,5 @@
 from nose.tools import *
-from app.person import Person
+from app.model.person import Person
 from helpers.helpers import *
 
 class TestRoutes:
