@@ -14,7 +14,7 @@ class TestPersonController:
         self.person = Person("Diana", 32, "dianagv@gmail.com")
 
     def tearDown(self):
-        self.database.remove(self.person.__dict__)
+        self.database['persons'].remove(self.person.__dict__)
 
     def test_mongo_client_should_be_sucessfully_created(self):
         assert self.client != None
@@ -32,6 +32,15 @@ class TestPersonController:
 
     def test_should_insert_a_person_and_return_inserted_id(self):
         inserted_id = self.person_controller.insert(self.person)
-        expected_id = self.database['persons'].find_one(self.person.__dict__)
-        print expected_id
+        expected_id = self.database['persons'].find_one(self.person.__dict__)['_id']
         assert_equal(inserted_id, expected_id)
+
+    def test_should_have_an_list_all_method(self):
+        person_list = self.person_controller.list_all()
+        assert person_list != None
+
+    def test_should_list_all_inserted_persons(self):
+        self.person_controller.insert(self.person)
+        person_list = self.person_controller.list_all()
+        assert len(person_list) > 0
+        assert_equal(person_list[0].name, self.person.name)
